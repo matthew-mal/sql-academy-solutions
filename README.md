@@ -75,3 +75,47 @@ FROM passenger ps
          JOIN Pass_in_trip pt ON ps.id = pt.passenger
 GROUP BY trip;
 ```
+13. [Вывести имена людей, у которых есть полный тёзка среди пассажиров](https://sql-academy.org/ru/trainer/tasks/13)
+```sql
+SELECT name
+FROM passenger
+GROUP BY name
+HAVING COUNT(name) > 1;
+```
+14. [В какие города летал Bruce Willis](https://sql-academy.org/ru/trainer/tasks/14)
+```sql
+SELECT town_to
+FROM passenger ps
+     JOIN Pass_in_trip pt ON ps.id = pt.passenger
+     JOIN trip tr ON tr.id = pt.trip
+WHERE name = 'Bruce Willis';
+```
+15. [Выведите дату и время прилёта пассажира Стив Мартин (Steve Martin) в Лондон (London)](https://sql-academy.org/ru/trainer/tasks/15)
+```sql
+SELECT time_in FROM trip
+    JOIN Pass_in_trip AS pt ON trip.id = pt.trip
+    JOIN passenger AS p ON p.id = pt.passenger
+WHERE name = 'Steve Martin' AND town_to = 'London';
+```
+16. [Вывести отсортированный по количеству перелетов (по убыванию) и имени (по возрастанию) список пассажиров, совершивших хотя бы 1 полет.](https://sql-academy.org/ru/trainer/tasks/16)
+```sql
+SELECT name,
+       COUNT(name) AS count
+FROM passenger ps
+     JOIN Pass_in_trip pt ON ps.id = pt.passenger
+     JOIN trip tr ON pt.trip = tr.id
+GROUP BY name
+ORDER BY count DESC,
+         name ASC;
+```
+17. [Определить, сколько потратил в 2005 году каждый из членов семьи. В результирующей выборке не выводите тех членов семьи, которые ничего не потратили.](https://sql-academy.org/ru/trainer/tasks/17)
+```sql
+SELECT member_name,
+       status,
+       SUM(unit_price * amount) AS costs
+FROM FamilyMembers fm
+         JOIN Payments ps ON fm.member_id = ps.family_member
+WHERE YEAR(DATE) = 2005
+GROUP BY member_name,
+         status;
+```
