@@ -243,3 +243,45 @@ FROM Trip
 WHERE town_from = 'Rostov'
   AND town_to = 'Moscow';
 ```
+29. [Выведите имена пассажиров улетевших в Москву (Moscow) на самолете TU-134](https://sql-academy.org/ru/trainer/tasks/29)
+```sql
+SELECT DISTINCT name
+FROM Passenger ps
+         JOIN Pass_in_trip pt ON ps.id = pt.passenger
+         JOIN Trip tr ON pt.trip = tr.id
+WHERE plane = 'TU-134'
+  AND town_to = 'Moscow';
+```
+30. [Выведите нагруженность (число пассажиров) каждого рейса (trip). Результат вывести в отсортированном виде по убыванию нагруженности.](https://sql-academy.org/ru/trainer/tasks/30)
+```sql
+SELECT trip,
+       COUNT(passenger) AS count
+FROM Pass_in_trip
+GROUP BY trip
+ORDER BY count DESC;
+```
+31. [Вывести всех членов семьи с фамилией Quincey.](https://sql-academy.org/ru/trainer/tasks/31)
+```sql
+SELECT *
+FROM FamilyMembers
+WHERE member_name LIKE '% Quincey';
+```
+32. [Вывести средний возраст людей (в годах), хранящихся в базе данных. Результат округлите до целого в меньшую сторону.](https://sql-academy.org/ru/trainer/tasks/32)
+```sql
+SELECT FLOOR(AVG(TIMESTAMPDIFF(YEAR, birthday, CURRENT_DATE))) AS age
+FROM FamilyMembers;
+```
+33. [Найдите среднюю стоимость икры. В базе данных хранятся данные о покупках красной (red caviar) и черной икры (black caviar).](https://sql-academy.org/ru/trainer/tasks/33)
+```sql
+SELECT AVG(unit_price) AS cost
+FROM Payments ps
+         JOIN Goods gs ON ps.good = gs.good_id
+WHERE good_name = 'red caviar'
+   OR good_name = 'black caviar';
+```
+34. [Сколько всего 10-ых классов](https://sql-academy.org/ru/trainer/tasks/34)
+```sql
+SELECT COUNT(name) AS count
+FROM Class
+WHERE name LIKE '10 %';
+```
