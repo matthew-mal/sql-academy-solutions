@@ -160,3 +160,86 @@ JOIN Payments AS p
 GROUP BY g.good_name
 HAVING COUNT(p.good) > 1;
 ```
+22. [Найти имена всех матерей (mother)](https://sql-academy.org/ru/trainer/tasks/22)
+```sql
+SELECT member_name
+FROM FamilyMembers
+WHERE status = 'mother';
+```
+23. [Найдите самый дорогой деликатес (delicacies) и выведите его цену](https://sql-academy.org/ru/trainer/tasks/23)
+```sql
+SELECT g.good_name, p.unit_price
+FROM Goods AS g
+JOIN Payments AS p
+    ON g.good_id = p.good
+JOIN GoodTypes AS gt
+    ON g.type = gt.good_type_id
+WHERE p.unit_price = (
+    SELECT MAX(p2.unit_price)
+    FROM Payments AS p2
+    JOIN Goods AS g2 ON g2.good_id = p2.good
+    JOIN GoodTypes AS gt2 ON g2.type = gt2.good_type_id
+    WHERE gt2.good_type_name = 'delicacies'
+);
+
+
+OR
+
+
+SELECT good_name,
+       unit_price
+FROM Goods gs
+         JOIN GoodTypes gt ON gs.type = gt.good_type_id
+         JOIN Payments ps ON gs.good_id = ps.good
+WHERE good_type_name = 'delicacies'
+ORDER BY unit_price DESC
+LIMIT 1;
+```
+24. [Определить кто и сколько потратил в июне 2005](https://sql-academy.org/ru/trainer/tasks/24)
+```sql
+SELECT member_name, SUM(amount*unit_price) AS costs
+FROM FamilyMembers AS fm
+JOIN Payments AS p 
+    ON fm.member_id = p.family_member
+WHERE MONTH(date) = 06 AND YEAR(date) = 2005
+GROUP BY member_name;
+```
+25. [Определить, какие товары не покупались в 2005 году](https://sql-academy.org/ru/trainer/tasks/25)
+```sql
+SELECT good_name
+FROM Goods
+WHERE good_id NOT IN (
+    SELECT good
+    FROM Payments
+    WHERE YEAR(date) = 2005
+);
+```
+26. [Определить группы товаров, которые не приобретались в 2005 году](https://sql-academy.org/ru/trainer/tasks/26)
+```sql
+SELECT good_type_name
+FROM GoodTypes
+WHERE good_type_id NOT IN (
+    SELECT type
+    FROM Goods gs
+             JOIN Payments ps ON gs.good_id = ps.good
+    WHERE YEAR(date) = 2005
+    GROUP BY good_id
+);
+```
+27. [Узнать, сколько потрачено на каждую из групп товаров в 2005 году. Вывести название группы и сумму](https://sql-academy.org/ru/trainer/tasks/27)
+```sql
+SELECT good_type_name,
+       SUM(amount * unit_price) AS costs
+FROM GoodTypes gt
+         JOIN Goods gs ON gt.good_type_id = gs.type
+         JOIN Payments ps ON gs.good_id = ps.good
+WHERE YEAR(date) = 2005
+GROUP BY good_type_name;
+```
+28. [Сколько рейсов совершили авиакомпании из Ростова (Rostov) в Москву (Moscow) ?](https://sql-academy.org/ru/trainer/tasks/28)
+```sql
+SELECT COUNT(*) AS COUNT
+FROM Trip
+WHERE town_from = 'Rostov'
+  AND town_to = 'Moscow';
+```
