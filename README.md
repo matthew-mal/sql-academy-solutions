@@ -112,10 +112,51 @@ ORDER BY count DESC,
 ```sql
 SELECT member_name,
        status,
-       SUM(unit_price * amount) AS costs
+       SUM(unit_price * amount) AS costs;
 FROM FamilyMembers fm
          JOIN Payments ps ON fm.member_id = ps.family_member
 WHERE YEAR(DATE) = 2005
 GROUP BY member_name,
          status;
+```
+18. [Выведите имя самого старшего человека. Если таких несколько, то выведите их всех.](https://sql-academy.org/ru/trainer/tasks/18)
+```sql
+SELECT member_name 
+FROM FamilyMembers
+WHERE birthday = (SELECT MIN(birthday) 
+                    FROM FamilyMembers);
+```
+19. [Определить, кто из членов семьи покупал картошку (potato)](https://sql-academy.org/ru/trainer/tasks/18)
+```sql
+SELECT DISTINCT status 
+FROM FamilyMembers as fm
+JOIN Payments AS p
+	ON fm.member_id = p.family_member
+JOIN Goods AS g
+	ON p.good = g.good_id
+WHERE g.good_name = 'potato';
+```
+20. [Сколько и кто из семьи потратил на развлечения (entertainment). Вывести статус в семье, имя, сумму](https://sql-academy.org/ru/trainer/tasks/20)
+```sql
+SELECT fm.status, 
+        fm.member_name, 
+        SUM(p.amount*p.unit_price) AS costs
+FROM FamilyMembers AS fm
+JOIN Payments AS p 
+    ON p.family_member = fm.member_id
+JOIN Goods as g 
+    ON p.good = g.good_id
+JOIN GoodTypes AS gt 
+    ON gt.good_type_id = g.type
+WHERE good_type_name = 'entertainment'
+GROUP BY fm.status, fm.member_name;
+```
+21. [Определить товары, которые покупали более 1 раза](https://sql-academy.org/ru/trainer/tasks/21)
+```sql
+SELECT g.good_name 
+FROM Goods AS g
+JOIN Payments AS p
+    ON p.good = g.good_id
+GROUP BY g.good_name
+HAVING COUNT(p.good) > 1;
 ```
