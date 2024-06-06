@@ -285,3 +285,35 @@ SELECT COUNT(name) AS count
 FROM Class
 WHERE name LIKE '10 %';
 ```
+35. [Сколько различных кабинетов школы использовались 2.09.2019 в образовательных целях ?](https://sql-academy.org/ru/trainer/tasks/35)
+```sql
+SELECT COUNT(classroom) AS count
+FROM Schedule
+WHERE date = '2019-09-02';
+```
+36. [Выведите информацию об обучающихся живущих на улице Пушкина (ul. Pushkina)?](https://sql-academy.org/ru/trainer/tasks/36)
+```sql
+SELECT *
+FROM Student
+WHERE address LIKE 'ul. Pushkina%';
+```
+37. [Сколько лет самому молодому обучающемуся ?](https://sql-academy.org/ru/trainer/tasks/37)
+```sql
+SELECT TIMESTAMPDIFF(YEAR, birthday, CURRENT_TIMESTAMP) AS year
+FROM Student
+ORDER BY year ASC
+LIMIT 1;
+```
+38. [Сколько Анн (Anna) учится в школе ?](https://sql-academy.org/ru/trainer/tasks/38)
+```sql
+SELECT COUNT(*) AS count
+FROM Student
+WHERE first_name = 'Anna';
+```
+39. [Сколько обучающихся в 10 B классе ?](https://sql-academy.org/ru/trainer/tasks/39)
+```sql
+SELECT COUNT(*) AS count
+FROM Student_in_class sc
+         JOIN Class cl ON sc.class = cl.id
+WHERE name = '10 B';
+```
