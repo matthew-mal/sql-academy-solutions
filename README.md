@@ -317,3 +317,55 @@ FROM Student_in_class sc
          JOIN Class cl ON sc.class = cl.id
 WHERE name = '10 B';
 ```
+40. [Выведите название предметов, которые преподает Ромашкин П.П. (Romashkin P.P.) ?](https://sql-academy.org/ru/trainer/tasks/40)
+```
+SELECT name AS subjects
+FROM Subject 
+WHERE id IN (
+    SELECT subject 
+    FROM Schedule AS s
+    JOIN Teacher AS t 
+        ON t.id = s.teacher
+    WHERE t.first_name LIKE 'P%' 
+        AND t.middle_name LIKE 'P%'
+        AND t.last_name = 'Romashkin'
+);
+```
+41. [Во сколько начинается 4-ый учебный предмет по расписанию ?](https://sql-academy.org/ru/trainer/tasks/41)
+```
+SELECT start_pair
+FROM Timepair
+WHERE id = 4;
+```
+42. [Сколько времени обучающийся будет находиться в школе, учась со 2-го по 4-ый уч. предмет](https://sql-academy.org/ru/trainer/tasks/42)
+```
+SELECT DISTINCT TIMEDIFF(
+                (SELECT end_pair 
+                    FROM Timepair 
+                    WHERE id = 4),
+                (SELECT start_pair 
+                    FROM Timepair 
+                    WHERE id = 2)) AS time
+FROM Timepair;
+```
+43. [Выведите фамилии преподавателей, которые ведут физическую культуру (Physical Culture). Отсортируйте преподавателей по фамилии в алфавитном порядке](https://sql-academy.org/ru/trainer/tasks/43)
+```
+SELECT last_name 
+FROM Teacher AS t
+JOIN Schedule AS s 
+    ON s.teacher = t.id
+JOIN Subject AS st 
+    ON st.id = s.subject
+WHERE st.name = 'Physical Culture'
+ORDER BY last_name;
+```
+44. [Найдите максимальный возраст (колич. лет) среди обучающихся 10 классов ?](https://sql-academy.org/ru/trainer/tasks/44)
+```
+SELECT TIMESTAMPDIFF(YEAR, birthday, CURRENT_TIMESTAMP) AS max_year
+FROM Student st
+         JOIN Student_in_class sc ON sc.student = st.id
+         JOIN Class cl ON cl.id = sc.class
+WHERE name LIKE '10 %'
+ORDER BY max_year DESC
+LIMIT 1;
+```
