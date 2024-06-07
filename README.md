@@ -408,3 +408,25 @@ FROM Class cl
 GROUP BY name
 ORDER BY count DESC;
 ```
+49. [Какой процент обучающихся учится в "10 A" классе? Выведите ответ в диапазоне от 0 до 100 без округления, например, 96.0201.](https://sql-academy.org/ru/trainer/tasks/49)
+```sql
+SELECT COUNT(*) * 100 / (
+    SELECT COUNT(*)
+    FROM Student_in_class
+) AS percent
+FROM Student_in_class sc
+         JOIN Class cs ON cs.id = sc.class
+WHERE name = '10 A';
+```
+50. [Какой процент обучающихся родился в 2000 году? Результат округлить до целого в меньшую сторону.](https://sql-academy.org/ru/trainer/tasks/50)
+```sql
+SELECT FLOOR(
+                       COUNT(*) * 100 / (
+                   SELECT COUNT(*)
+                   FROM Student_in_class
+               )
+           ) AS percent
+FROM Student_in_class sc
+         JOIN Student st ON st.id = sc.student
+WHERE YEAR(birthday) = 2000;
+```
