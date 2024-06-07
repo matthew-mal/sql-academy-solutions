@@ -392,3 +392,11 @@ FROM Schedule sc
 WHERE last_name = 'Krauze'
 GROUP BY name;
 ```
+47. [Сколько занятий провел Krauze 30 августа 2019 г.?](https://sql-academy.org/ru/trainer/tasks/47)
+```
+SELECT COUNT(*) AS count
+FROM Schedule sc
+         JOIN Teacher tc ON tc.id = sc.teacher
+WHERE DATE_FORMAT(date, '%e %M %Y') = '30 August 2019'
+  AND last_name = 'Krauze';
+```
