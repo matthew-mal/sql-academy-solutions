@@ -400,3 +400,12 @@ FROM Schedule sc
 WHERE DATE_FORMAT(date, '%e %M %Y') = '30 August 2019'
   AND last_name = 'Krauze';
 ```
+48. [Выведите заполненность классов в порядке убывания](https://sql-academy.org/ru/trainer/tasks/48)
+```
+SELECT name,
+       COUNT(student) AS count
+FROM Class cl
+         JOIN Student_in_class sc ON sc.class = cl.id
+GROUP BY name
+ORDER BY count DESC;
+```
