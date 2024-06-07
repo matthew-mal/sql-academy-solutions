@@ -318,7 +318,7 @@ FROM Student_in_class sc
 WHERE name = '10 B';
 ```
 40. [Выведите название предметов, которые преподает Ромашкин П.П. (Romashkin P.P.) ?](https://sql-academy.org/ru/trainer/tasks/40)
-```
+```sql
 SELECT name AS subjects
 FROM Subject 
 WHERE id IN (
@@ -332,13 +332,13 @@ WHERE id IN (
 );
 ```
 41. [Во сколько начинается 4-ый учебный предмет по расписанию ?](https://sql-academy.org/ru/trainer/tasks/41)
-```
+```sql
 SELECT start_pair
 FROM Timepair
 WHERE id = 4;
 ```
 42. [Сколько времени обучающийся будет находиться в школе, учась со 2-го по 4-ый уч. предмет](https://sql-academy.org/ru/trainer/tasks/42)
-```
+```sql
 SELECT DISTINCT TIMEDIFF(
                 (SELECT end_pair 
                     FROM Timepair 
@@ -349,7 +349,7 @@ SELECT DISTINCT TIMEDIFF(
 FROM Timepair;
 ```
 43. [Выведите фамилии преподавателей, которые ведут физическую культуру (Physical Culture). Отсортируйте преподавателей по фамилии в алфавитном порядке](https://sql-academy.org/ru/trainer/tasks/43)
-```
+```sql
 SELECT last_name 
 FROM Teacher AS t
 JOIN Schedule AS s 
@@ -360,7 +360,7 @@ WHERE st.name = 'Physical Culture'
 ORDER BY last_name;
 ```
 44. [Найдите максимальный возраст (колич. лет) среди обучающихся 10 классов ?](https://sql-academy.org/ru/trainer/tasks/44)
-```
+```sql
 SELECT TIMESTAMPDIFF(YEAR, birthday, CURRENT_TIMESTAMP) AS max_year
 FROM Student st
          JOIN Student_in_class sc ON sc.student = st.id
@@ -370,7 +370,7 @@ ORDER BY max_year DESC
 LIMIT 1;
 ```
 45. [Какие кабинеты чаще всего использовались для проведения занятий? Выведите те, которые использовались максимальное количество раз.](https://sql-academy.org/ru/trainer/tasks/45)
-```
+```sql
 SELECT classroom
 FROM Schedule
 GROUP BY classroom
@@ -382,9 +382,8 @@ HAVING count(classroom) = (
     LIMIT 1
 );
 ```
-
 46. [В каких классах введет занятия преподаватель "Krauze" ?](https://sql-academy.org/ru/trainer/tasks/46)
-```
+```sql
 SELECT name
 FROM Schedule sc
          JOIN Teacher tc ON tc.id = sc.teacher
@@ -393,7 +392,7 @@ WHERE last_name = 'Krauze'
 GROUP BY name;
 ```
 47. [Сколько занятий провел Krauze 30 августа 2019 г.?](https://sql-academy.org/ru/trainer/tasks/47)
-```
+```sq;
 SELECT COUNT(*) AS count
 FROM Schedule sc
          JOIN Teacher tc ON tc.id = sc.teacher
@@ -401,7 +400,7 @@ WHERE DATE_FORMAT(date, '%e %M %Y') = '30 August 2019'
   AND last_name = 'Krauze';
 ```
 48. [Выведите заполненность классов в порядке убывания](https://sql-academy.org/ru/trainer/tasks/48)
-```
+```sql
 SELECT name,
        COUNT(student) AS count
 FROM Class cl
