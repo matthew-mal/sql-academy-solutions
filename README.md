@@ -369,3 +369,16 @@ WHERE name LIKE '10 %'
 ORDER BY max_year DESC
 LIMIT 1;
 ```
+45. [Какие кабинеты чаще всего использовались для проведения занятий? Выведите те, которые использовались максимальное количество раз.](https://sql-academy.org/ru/trainer/tasks/45)
+```
+SELECT classroom
+FROM Schedule
+GROUP BY classroom
+HAVING count(classroom) = (
+    SELECT COUNT(*) AS count
+    FROM Schedule
+    GROUP BY classroom
+    ORDER BY count DESC
+    LIMIT 1
+);
+```
