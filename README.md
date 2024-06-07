@@ -382,3 +382,13 @@ HAVING count(classroom) = (
     LIMIT 1
 );
 ```
+
+46. [В каких классах введет занятия преподаватель "Krauze" ?](https://sql-academy.org/ru/trainer/tasks/46)
+```
+SELECT name
+FROM Schedule sc
+         JOIN Teacher tc ON tc.id = sc.teacher
+         JOIN Class cl ON cl.id = sc.class
+WHERE last_name = 'Krauze'
+GROUP BY name;
+```
