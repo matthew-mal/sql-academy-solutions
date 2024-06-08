@@ -511,3 +511,53 @@ SET id             = (
     ),
     rating = 5;
 ```
+59. [Вывести пользователей,указавших Белорусский номер телефона ? Телефонный код Белоруссии +375.](https://sql-academy.org/ru/trainer/tasks/59)
+```sql
+SELECT *
+FROM Users
+WHERE phone_number LIKE '+375%';
+```
+60. [Выведите идентификаторы преподавателей, которые хотя бы один раз за всё время преподавали в каждом из одиннадцатых классов.](https://sql-academy.org/ru/trainer/tasks/60)
+```sql
+SELECT teacher
+FROM Schedule sc
+         JOIN Class cl ON sc.class = cl.id
+WHERE name LIKE '11 %'
+GROUP BY teacher
+HAVING COUNT(DISTINCT name) = 2;
+```
+61. [Выведите список комнат, которые были зарезервированы хотя бы на одни сутки в 12-ую неделю 2020 года. В данной задаче в качестве одной недели примите период из семи дней, первый из которых начинается 1 января 2020 года. Например, первая неделя года — 1–7 января, а третья — 15–21 января.](https://sql-academy.org/ru/trainer/tasks/61)
+```sql
+SELECT Rooms.*
+FROM Reservations
+         JOIN Rooms ON Rooms.id = Reservations.room_id
+WHERE WEEK(start_date, 1) = 12
+  AND YEAR(start_date) = 2020;
+```
+62. [Вывести в порядке убывания популярности доменные имена 2-го уровня, используемые пользователями для электронной почты. Полученный результат необходимо дополнительно отсортировать по возрастанию названий доменных имён.](https://sql-academy.org/ru/trainer/tasks/62)
+```sql
+SELECT SUBSTRING_INDEX(email, '@', -1)        AS domain,
+       COUNT(substring_index(email, '@', -1)) AS count
+FROM Users
+GROUP BY domain
+ORDER BY count DESC,
+         domain;
+```
+63. [Выведите отсортированный список (по возрастанию) фамилий и имен студентов в виде Фамилия.И.](https://sql-academy.org/ru/trainer/tasks/63)
+```sql
+SELECT CONCAT(last_name, '.', LEFT(first_name, 1), '.') AS name
+FROM Student
+ORDER BY name;
+```
+64. [Вывести количество бронирований по каждому месяцу каждого года, в которых было хотя бы 1 бронирование. Результат отсортируйте в порядке возрастания даты бронирования.](https://sql-academy.org/ru/trainer/tasks/64)
+```sql
+SELECT YEAR(start_date)  AS year,
+       MONTH(start_date) AS month,
+       COUNT(*)          AS amount
+FROM Reservations
+GROUP BY YEAR(start_date),
+         MONTH(start_date)
+ORDER BY year,
+         month;
+```
+
