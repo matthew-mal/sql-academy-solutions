@@ -430,3 +430,26 @@ FROM Student_in_class sc
          JOIN Student st ON st.id = sc.student
 WHERE YEAR(birthday) = 2000;
 ```
+51. [Добавьте товар с именем "Cheese" и типом "food" в список товаров (Goods).](https://sql-academy.org/ru/trainer/tasks/51)
+```sql
+INSERT INTO Goods
+SET good_id   = (
+    SELECT COUNT(*) + 1
+    FROM Goods AS gs
+),
+    good_name = 'Cheese',
+    type      = (
+        SELECT good_type_id
+        FROM GoodTypes
+        WHERE good_type_name = 'food'
+    );
+```
+52. [Добавьте в список типов товаров (GoodTypes) новый тип "auto".](https://sql-academy.org/ru/trainer/tasks/52)
+```sql
+INSERT INTO GoodTypes
+SET good_type_id   = (
+    SELECT COUNT(*) + 1
+    FROM GoodTypes AS gt
+),
+    good_type_name = 'auto';
+```
