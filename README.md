@@ -453,3 +453,16 @@ SET good_type_id   = (
 ),
     good_type_name = 'auto';
 ```
+53. [Измените имя "Andie Quincey" на новое "Andie Anthony".](https://sql-academy.org/ru/trainer/tasks/53)
+```sql
+UPDATE FamilyMembers
+SET member_name = 'Andie Anthony'
+WHERE member_name = 'Andie Quincey';
+```
+54. [Удалить всех членов семьи с фамилией "Quincey".](https://sql-academy.org/ru/trainer/tasks/54)
+```sql
+DELETE
+FROM FamilyMembers
+WHERE member_name LIKE '% Quincey';
+```
+
