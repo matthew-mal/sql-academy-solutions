@@ -465,4 +465,49 @@ DELETE
 FROM FamilyMembers
 WHERE member_name LIKE '% Quincey';
 ```
-
+55. [Удалить компании, совершившие наименьшее количество рейсов.](https://sql-academy.org/ru/trainer/tasks/55)
+```sql
+DELETE
+FROM company
+WHERE id IN (
+    SELECT company
+    FROM trip
+    GROUP BY company
+    HAVING COUNT(*) = (
+        SELECT COUNT(*) AS count
+        FROM trip
+        GROUP BY company
+        ORDER BY count
+        LIMIT 1
+    )
+);
+```
+56. [Удалить все перелеты, совершенные из Москвы (Moscow).](https://sql-academy.org/ru/trainer/tasks/56)
+```sql
+DELETE
+FROM trip
+WHERE town_from = 'Moscow';
+```
+57. [Перенести расписание всех занятий на 30 мин. вперед.](https://sql-academy.org/ru/trainer/tasks/57)
+```sql
+UPDATE Timepair
+SET start_pair = ADDTIME(start_pair, '00:30:00'),
+    end_pair   = ADDTIME(end_pair, '00:30:00');
+```
+58. [Добавить отзыв с рейтингом 5 на жилье, находящиеся по адресу "11218, Friel Place, New York", от имени "George Clooney"](https://sql-academy.org/ru/trainer/tasks/58)
+```sql
+INSERT INTO Reviews
+SET id             = (
+    SELECT COUNT(*) + 1
+    FROM Reviews rw
+),
+    reservation_id = (
+        SELECT rs.id
+        FROM Reservations rs
+                 JOIN Rooms rm ON rm.id = rs.room_id
+                 JOIN Users us ON rs.user_id = us.id
+        WHERE address = '11218, Friel Place, New York'
+          AND name = 'George Clooney'
+    ),
+    rating = 5;
+```
