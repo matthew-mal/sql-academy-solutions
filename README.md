@@ -754,3 +754,11 @@ WHERE pt.name IN ('Laptop', 'Monitor')
 GROUP BY c.customer_key
 HAVING COUNT(DISTINCT pt.name) = 2;
 ```
+103. [Вывести список имён сотрудников, получающих большую заработную плату, чем у непосредственного руководителя.](https://sql-academy.org/ru/trainer/tasks/103)
+```sql
+SELECT e.NAME AS name
+FROM EMPLOYEE e
+JOIN EMPLOYEE AS c 
+    ON e.CHIEF_ID = c.ID
+WHERE e.SALARY > c.SALARY;
+```
