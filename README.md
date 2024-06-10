@@ -740,3 +740,17 @@ FROM (
 		AND YEAR(Purchase.date) = 2024
      ) AS uniqueCustomers
 ```
+94. [Вывести имена покупателей, каждый из которых приобрёл Laptop и Monitor (использовать наименование товара product.name) в марте 2024 года?](https://sql-academy.org/ru/trainer/tasks/94)
+```sql
+SELECT c.name
+FROM Customer AS c
+JOIN Purchase AS p
+	ON c.customer_key = p.customer_key
+JOIN Product AS pt
+    ON p.product_key = pt.product_key
+WHERE pt.name IN ('Laptop', 'Monitor')
+	AND MONTH(p.date) = 3
+	AND YEAR(p.date) = 2024
+GROUP BY c.customer_key
+HAVING COUNT(DISTINCT pt.name) = 2;
+```
