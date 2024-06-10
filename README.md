@@ -754,6 +754,30 @@ WHERE pt.name IN ('Laptop', 'Monitor')
 GROUP BY c.customer_key
 HAVING COUNT(DISTINCT pt.name) = 2;
 ```
+97. [Посчитать количество работающих складов на текущую дату по каждому городу. Вывести только те города, у которых количество складов более 80. Данные на выходе - город, количество складов.](https://sql-academy.org/ru/trainer/tasks/97)
+```sql
+SELECT city, COUNT(*) AS warehouse_count
+FROM Warehouses
+WHERE current_date BETWEEN date_open AND date_close
+GROUP BY city
+HAVING COUNT(*) > 80;
+```
+99. [Посчитай доход с женской аудитории (доход = сумма(price * items)). Обратите внимание, что в таблице женская аудитория имеет поле user_gender «female» или «f».](https://sql-academy.org/ru/trainer/tasks/99)
+```sql
+SELECT SUM(price*items) AS income_from_female
+FROM Purchases
+WHERE user_gender IN ('f', 'female');
+```
+101. [Выведи для каждого пользователя первое наименование, которое он заказал (первое по времени транзакции).](https://sql-academy.org/ru/trainer/tasks/101)
+```sql
+SELECT user_id, item
+FROM (
+    SELECT user_id, item,
+           ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY transaction_ts) AS rn
+    FROM Transactions
+) t
+WHERE t.rn = 1;
+```
 103. [Вывести список имён сотрудников, получающих большую заработную плату, чем у непосредственного руководителя.](https://sql-academy.org/ru/trainer/tasks/103)
 ```sql
 SELECT e.NAME AS name
