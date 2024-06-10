@@ -728,3 +728,15 @@ SELECT id, name, email
 FROM Users
 WHERE email_verified_at IS NOT NULL;
 ```
+93. [Какой средний возраст клиентов, купивших Smartwatch (использовать наименование товара product.name) в 2024 году?](https://sql-academy.org/ru/trainer/tasks/93)
+```sql
+SELECT AVG(uniqueCustomers.age) AS average_age
+FROM (
+      SELECT DISTINCT Customer.customer_key, Customer.age
+      FROM Purchase
+	JOIN Customer ON Purchase.customer_key = Customer.customer_key
+	JOIN Product ON Purchase.product_key = Product.product_key
+	WHERE Product.name = 'Smartwatch'
+		AND YEAR(Purchase.date) = 2024
+     ) AS uniqueCustomers
+```
