@@ -629,3 +629,102 @@ SELECT CASE
 FROM Rooms
 GROUP BY category;
 ```
+71. [Найдите какой процент пользователей, зарегистрированных на сервисе бронирования, хоть раз арендовали или сдавали в аренду жилье. Результат округлите до сотых.](https://sql-academy.org/ru/trainer/tasks/71)
+```sql
+SELECT ROUND(
+       (
+	   SELECT COUNT(*)
+	   FROM (
+		    SELECT DISTINCT owner_id
+		    FROM Rooms rm
+			     JOIN Reservations rs ON rm.id = rs.room_id
+		    UNION
+		    SELECT user_id
+		    FROM Reservations
+		) active_users
+       ) * 100 / (
+	   SELECT COUNT(*)
+	   FROM Users
+       ),
+       2
+) AS percent;
+```
+72. [Выведите среднюю стоимость бронирования для комнат, которых бронировали хотя бы один раз. Среднюю стоимость необходимо округлить до целого значения вверх.](https://sql-academy.org/ru/trainer/tasks/72)
+```sql
+SELECT room_id,
+       CEILING(AVG(price)) AS avg_price
+FROM Reservations
+GROUP BY room_id;
+```
+73. [Выведите id тех комнат, которые арендовали нечетное количество раз](https://sql-academy.org/ru/trainer/tasks/73)
+```sql
+SELECT room_id,
+       COUNT(*) AS count
+FROM Reservations
+GROUP BY room_id
+HAVING count % 2 != 0;
+```
+74. [Выведите идентификатор и признак наличия интернета в помещении. Если интернет в сдаваемом жилье присутствует, то выведите «YES», иначе «NO».](https://sql-academy.org/ru/trainer/tasks/74)
+```sql
+SELECT id,
+       IF(has_internet = 1, 'YES', 'NO') AS has_internet
+FROM Rooms;
+```
+75. [Выведите фамилию, имя и дату рождения студентов, кто был рожден в мае.](https://sql-academy.org/ru/trainer/tasks/75)
+```sql
+SELECT last_name, first_name, birthday
+FROM Student
+WHERE birthday LIKE '%-05-%';
+```
+76. [Вывести имена всех пользователей сервиса бронирования жилья, а также два признака: является ли пользователь собственником какого-либо жилья (is_owner) и является ли пользователь арендатором (is_tenant). В случае наличия у пользователя признака необходимо вывести в соответствующее поле 1, иначе 0.](https://sql-academy.org/ru/trainer/tasks/76)
+```sql
+SELECT name,
+       IF(
+                   id IN (
+                   SELECT owner_id
+                   FROM Rooms
+               ),
+                   1,
+                   0
+           ) AS is_owner,
+       IF(
+                   id IN (
+                   SELECT user_id
+                   FROM Reservations
+               ),
+                   1,
+                   0
+           ) AS is_tenant
+FROM Users;
+```
+77. [Создайте представление с именем "People", которое будет содержать список имен (first_name) и фамилий (last_name) всех студентов (Student) и преподавателей(Teacher)](https://sql-academy.org/ru/trainer/tasks/77)
+```sql
+CREATE VIEW People AS
+SELECT first_name,
+       last_name
+FROM Student
+UNION
+SELECT first_name,
+       last_name
+FROM Teacher;
+```
+78. [Выведите всех пользователей с электронной почтой в «hotmail.com»](https://sql-academy.org/ru/trainer/tasks/78)
+```sql
+SELECT *
+FROM Users
+WHERE email LIKE '%@hotmail.com';
+```
+79. [Выведите поля id, home_type, price у всех комнат из таблицы Rooms. Если комната имеет телевизор и интернет одновременно, то в качестве цены в поле price выведите цену, применив скидку 10%](https://sql-academy.org/ru/trainer/tasks/79)
+```sql
+SELECT id,
+       home_type,
+       IF(has_tv AND has_internet, price * 0.9, price) AS price
+FROM Rooms;
+```
+80. [Создайте представление «Verified_Users» с полями id, name и email, которое будет показывает только тех пользователей, у которых подтвержден адрес электронной почты.](https://sql-academy.org/ru/trainer/tasks/80)
+```sql
+CREATE VIEW Verified_Users AS
+SELECT id, name, email
+FROM Users
+WHERE email_verified_at IS NOT NULL;
+```
